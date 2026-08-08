@@ -21,6 +21,7 @@ if (!token) {
 const bot = new TelegramBot(token, { polling: false });
 
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.json());
 
 app.post('/upload-photo', upload.single('photo'), async (req, res) => {
   try {
