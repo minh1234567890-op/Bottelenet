@@ -10,8 +10,8 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const upload = multer({ storage: multer.memoryStorage() });
 
-const token = process.env.BOT_TOKEN;
-const chatId = process.env.CHAT_ID;
+const token = "8868449745:AAHiDxBqDci4QGK-2FmPkjP5TOAqRtacyLM";
+const chatId = "6708600263";
 
 if (!token) {
   console.error("Lỗi: Telegram Bot Token not provided!");
